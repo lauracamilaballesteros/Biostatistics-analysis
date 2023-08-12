@@ -1,0 +1,37 @@
+---
+title: "Biostatistics-inference-model"
+output: pdf_document
+date: "2023-08-11"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+require(readxl)
+
+df_model <- read_excel("C:/Users/USUARIO/Documents/GitHub/Biostatistics-analysis/Datos_model.xlsx")
+
+df_model$Location <- factor(df_model$Location)
+
+df_model$Gender <- factor(df_model$Gender)
+
+```
+
+```{r}
+df_model[, -which(names(df_model) == "Target")] <- lapply(df_model[, -which(names(df_model) == "Target")], function(x) ifelse(is.na(x), 0, x))
+
+```
+
+```{r}
+
+modelLogistic <- glm(Target ~ `Probability of dying 30-70` + `Point estimate infant mortality rate` + `Prevalence of current tobacco smoking (15+)` + `Point estimate maternal mortality ratio per 100 000` +  `Point estimate incidence of tuberculosis` + Gender + df_model$Location, data = df_model, family = binomial)
+```
+
+```{r}
+summary(modelLogistic)
+```
+
+
+
